@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfis — BRUXAS Moto Grupo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Inter:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #ffffff;
+            --bg: #000000;
+        }
+
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .font-cinzel {
+            font-family: 'Cinzel', serif;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.4s ease;
+        }
+
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.07);
+            border-color: rgba(255, 255, 255, 0.25);
+            transform: translateY(-4px);
+        }
+
+        .chrome-text {
+            background: linear-gradient(135deg, #ffffff 0%, #a1a1a1 50%, #ffffff 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+        }
+
+        /* Patente badges */
+        .badge-presidente {
+            border-color: #FFD700;
+            color: #FFD700;
+        }
+
+        .badge-vice {
+            border-color: #C0C0C0;
+            color: #C0C0C0;
+        }
+
+        .badge-secretaria {
+            border-color: #CD7F32;
+            color: #CD7F32;
+        }
+
+        .badge-tesoureira {
+            border-color: #b8b8b8;
+            color: #b8b8b8;
+        }
+
+        .badge-membro {
+            border-color: rgba(255, 255, 255, 0.4);
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Linha do tempo de motos */
+        .timeline-line {
+            position: absolute;
+            left: 10px;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .timeline-dot {
+            width: 8px;
+            height: 8px;
+            background: #fff;
+            border-radius: 50%;
+            position: absolute;
+            left: 7px;
+            top: 6px;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.92);
+            backdrop-filter: blur(8px);
+            z-index: 200;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .modal-box {
+            background: #0a0a0a;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            max-width: 680px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        /* Blockchain badge */
+        .chain-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid rgba(130, 71, 229, 0.5);
+            color: rgba(167, 139, 250, 0.9);
+            font-size: 10px;
+            letter-spacing: 0.15em;
+            padding: 4px 10px;
+            text-transform: uppercase;
+        }
+
+        .chain-dot {
+            width: 6px;
+            height: 6px;
+            background: #8b5cf6;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.3;
+            }
+        }
+
+        /* Reveal */
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.7s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #000;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #222;
+            border-radius: 10px;
+        }
+
+        /* Patch logo */
+        .patch-logo {
+            width: 64px;
+            height: 64px;
+            background: #fff;
+            padding: 2px;
+            border-radius: 50%;
+            border: 3px solid #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .member-photo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center top;
+            filter: grayscale(1);
+            transition: filter 0.5s ease, transform 0.5s ease;
+        }
+
+        .glass-card:hover .member-photo {
+            filter: grayscale(0);
+            transform: scale(1.04);
+        }
+
+        /* Foto circular no modal */
+        .modal-photo-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2.5rem 1rem 1rem;
+            background: linear-gradient(to bottom, #111 0%, #0a0a0a 100%);
+            position: relative;
+        }
+
+        .modal-photo-circle {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.05), 0 20px 60px rgba(0, 0, 0, 0.8);
+            flex-shrink: 0;
+        }
+
+        .modal-photo-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center top;
+        }
+
+        /* Search */
+        .search-input {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .search-input:focus {
+            border-color: rgba(255, 255, 255, 0.35);
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Filter buttons */
+        .filter-btn {
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 11px;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            padding: 6px 16px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            border-color: rgba(255, 255, 255, 0.7);
+            color: #fff;
+        }
+
+        @media (max-width: 768px) {
+            .glass-card:hover {
+                transform: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header (igual ao site principal) -->
+    <header id="navbar"
+        class="fixed top-0 left-0 w-full z-50 transition-all duration-500 py-6 bg-black/90 backdrop-blur-md border-b border-white/10">
+        <div class="container mx-auto px-6 flex items-center justify-between">
+            <a href="index.html"
+                class="text-xs font-semibold uppercase tracking-widest text-white/50 hover:text-white transition-colors">
+                ← Voltar ao Site
+            </a>
+            <div class="patch-logo">
+                <img src="logo.png" alt="BRUXAS" class="w-full h-full object-cover rounded-full">
+            </div>
+            <div class="chain-badge">
+                <span class="chain-dot"></span>
+                Polygon
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero da seção -->
+    <section class="pt-32 pb-16 bg-black">
+        <div class="container mx-auto px-6 text-center reveal active">
+            <span class="text-white/30 text-xs uppercase tracking-[0.3em] block mb-3">Irmandade Verificada</span>
+            <h1 class="text-4xl md:text-7xl font-cinzel font-black mb-4 chrome-text">As Bruxas</h1>
+            <p class="text-white/40 text-sm max-w-md mx-auto mb-8">
+                Cada perfil é registrado na blockchain Polygon.<br>
+                Patentes e histórico imutáveis, verificáveis por qualquer pessoa.
+            </p>
+
+            <!-- Busca e filtros -->
+            <div class="max-w-2xl mx-auto space-y-4">
+                <input type="text" id="searchInput" placeholder="Buscar por nome ou moto..."
+                    class="search-input w-full px-5 py-3 text-sm" oninput="filterMembers()">
+                <div class="flex flex-wrap justify-center gap-2" id="filterButtons">
+                    <button class="filter-btn active" onclick="setFilter('todas', this)">Todas</button>
+                    <button class="filter-btn" onclick="setFilter('Presidente', this)">Presidente</button>
+                    <button class="filter-btn" onclick="setFilter('Vice-Presidente', this)">Vice</button>
+                    <button class="filter-btn" onclick="setFilter('Secretária', this)">Secretária</button>
+                    <button class="filter-btn" onclick="setFilter('Tesoureira', this)">Tesoureira</button>
+                    <button class="filter-btn" onclick="setFilter('Membro', this)">Membros</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Grade de perfis -->
+    <section class="py-8 pb-24 bg-black">
+        <div class="container mx-auto px-6">
+            <div id="membersGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Cards gerados pelo JS -->
+            </div>
+            <p id="emptyMsg" class="text-center text-white/30 text-sm py-20 hidden">Nenhuma membra encontrada.</p>
+        </div>
+    </section>
+
+    <!-- Modal de perfil completo -->
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+        <div class="modal-box" id="modalBox">
+            <!-- conteúdo preenchido via JS -->
+        </div>
+    </div>
+
+    <script>
+        // ========================================================
+        // DADOS DAS MEMBRAS
+        // Futuramente esses dados virão da blockchain Polygon.
+        // Por enquanto são dados de exemplo para visualização.
+        // ========================================================
+        const members = [
+            {
+                id: 1,
+                nome: "Minerva",
+                apelido: "",
+                patente: "Presidente",
+                motoAtual: "Horizon 150cc",
+                desde: "2020",
+                cidade: "Caruaru, PE",
+                foto: "https://i.imgur.com/O2rdD36.jpg",
+                historico: [],
+                blockchain: "0x9eE1a...B45c",
+                txHash: "0xc3d4e5...2f6a"
+            },
+            {
+                id: 2,
+                nome: "Corvina",
+                apelido: "",
+                patente: "Vice-Presidente",
+                motoAtual: "Tenere 250cc",
+                desde: "2018",
+                cidade: "Petrolina, PE",
+                foto: "https://i.imgur.com/OMwKQbq.jpg",
+                historico: [],
+                blockchain: "0x4aB2c...F91d",
+                txHash: "0xf3a1b2...9c4e"
+            },
+            {
+                id: 3,
+                nome: "Galena",
+                apelido: "",
+                patente: "Membro",
+                motoAtual: "R15 155cc",
+                desde: "2019",
+                cidade: "Juazeiro, BA",
+                foto: "https://i.imgur.com/hyprL1n.jpg",
+                historico: [],
+                blockchain: "0x7cD4f...A23b",
+                txHash: "0xb2c3d4...1e5f"
+            },
+
+            {
+                id: 4,
+                nome: "Tai",
+                apelido: "",
+                patente: "Membro",
+                motoAtual: "Fazer 250cc",
+                desde: "2020",
+                cidade: "Petrolina, PE",
+                foto: "https://i.imgur.com/LXwnCxo.jpg",
+                historico: [],
+                blockchain: "0x2fF3c...C67d",
+                txHash: "0xd4e5f6...3a7b"
+            },
+            {
+                id: 5,
+                nome: "Vampira",
+                apelido: "",
+                patente: "Membro",
+                motoAtual: "Lander 250cc",
+                desde: "2021",
+                cidade: "Ouricuri, PE",
+                foto: "https://i.imgur.com/VZe4Vp6.jpg",
+                historico: [],
+                blockchain: "0x5aA7b...D89e",
+                txHash: "0xe5f6a7...4b8c"
+            }
+        ];
+
+        // Badge de patente
+        function badgeClass(patente) {
+            const map = {
+                "Presidente": "badge-presidente",
+                "Vice-Presidente": "badge-vice",
+                "Secretária": "badge-secretaria",
+                "Tesoureira": "badge-tesoureira",
+                "Membro": "badge-membro"
+            };
+            return map[patente] || "badge-membro";
+        }
+
+        // Renderiza grade
+        let activeFilter = 'todas';
+
+        function renderGrid(list) {
+            const grid = document.getElementById('membersGrid');
+            const empty = document.getElementById('emptyMsg');
+            grid.innerHTML = '';
+
+            if (list.length === 0) {
+                empty.classList.remove('hidden');
+                return;
+            }
+            empty.classList.add('hidden');
+
+            list.forEach((m, i) => {
+                const card = document.createElement('div');
+                card.className = 'glass-card reveal cursor-pointer';
+                card.style.transitionDelay = (i * 0.05) + 's';
+                card.onclick = () => openModal(m);
+                const apelidoHTML = m.apelido
+                    ? `<p class="text-white/40 text-xs mt-0.5 italic">"${m.apelido}"</p>`
+                    : '';
+                card.innerHTML = `
+                    <div class="relative">
+                        <div class="aspect-[3/4] overflow-hidden">
+                            <img src="${m.foto}" alt="${m.nome}" class="member-photo w-full h-full">
+                        </div>
+                        <div class="absolute top-3 right-3">
+                            <span class="chain-badge text-[9px] py-[3px] px-2">
+                                <span class="chain-dot" style="width:5px;height:5px;"></span>
+                                On-chain
+                            </span>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-start justify-between mb-3">
+                            <div>
+                                <h3 class="font-cinzel font-bold text-lg leading-tight">${m.nome}</h3>
+                                ${apelidoHTML}
+                            </div>
+                            <span class="border text-[10px] uppercase tracking-wider px-2 py-1 shrink-0 ml-3 ${badgeClass(m.patente)}">${m.patente}</span>
+                        </div>
+                        <div class="border-t border-white/10 pt-4 space-y-2">
+                            <div class="flex items-center gap-2 text-sm text-white/60">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 17a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"/><path d="M18.5 17a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"/><path d="M12 17h1.5l2-4.5h-5.5Z"/><path d="M7 12h10l-2-5H9l-2 5Z"/></svg>
+                                <span>${m.motoAtual}</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-xs text-white/30">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                                <span>Membra desde ${m.desde} · ${m.cidade}</span>
+                            </div>
+                        </div>
+                        <div class="mt-4 text-right">
+                            <span class="text-white/20 text-[10px] uppercase tracking-widest">Ver perfil →</span>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+
+            // Ativar reveal
+            setTimeout(() => {
+                document.querySelectorAll('.reveal').forEach(el => el.classList.add('active'));
+            }, 50);
+        }
+
+        function filterMembers() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = members.filter(m => {
+                const matchSearch = m.nome.toLowerCase().includes(query) ||
+                    m.motoAtual.toLowerCase().includes(query) ||
+                    m.apelido.toLowerCase().includes(query);
+                const matchFilter = activeFilter === 'todas' || m.patente === activeFilter;
+                return matchSearch && matchFilter;
+            });
+            renderGrid(filtered);
+        }
+
+        function setFilter(filter, btn) {
+            activeFilter = filter;
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            filterMembers();
+        }
+
+        // Modal
+        function openModal(m) {
+            const box = document.getElementById('modalBox');
+
+            const historyHTML = m.historico.length
+                ? m.historico.map((h, i) => `
+                    <div class="relative pl-8 pb-5 last:pb-0">
+                        ${i < m.historico.length - 1 ? '<div class="timeline-line"></div>' : ''}
+                        <div class="timeline-dot ${i === m.historico.length - 1 ? 'bg-white' : 'bg-white/40'}"></div>
+                        <p class="text-sm font-semibold text-white/80">${h.moto || 'Não informado'}</p>
+                        <p class="text-xs text-white/30 mt-0.5">${h.ano || ''}</p>
+                    </div>
+                `).join('')
+                : '<p class="text-white/20 text-xs">Histórico ainda não cadastrado.</p>';
+
+            const apelidoModalHTML = m.apelido
+                ? `<p class="text-white/40 italic text-sm mt-1">"${m.apelido}"</p>`
+                : '';
+
+            box.innerHTML = `
+                <div class="relative">
+                    <button onclick="closeModal()" class="absolute top-4 right-4 text-white/60 hover:text-white bg-black/50 p-2 z-10">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                    </button>
+                    <div class="modal-photo-wrapper">
+                        <div class="text-center">
+                            <div class="modal-photo-circle mx-auto mb-4">
+                                <img src="${m.foto}" alt="${m.nome}">
+                            </div>
+                            <span class="border text-[10px] uppercase tracking-wider px-2 py-1 mb-2 inline-block ${badgeClass(m.patente)}">${m.patente}</span>
+                            <h2 class="font-cinzel font-black text-2xl md:text-3xl mt-2">${m.nome}</h2>
+                            ${apelidoModalHTML}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-6 md:p-8 space-y-8">
+                    <!-- Info básica -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="border border-white/10 p-4">
+                            <p class="text-white/30 text-[10px] uppercase tracking-widest mb-1">Cidade</p>
+                            <p class="text-sm font-semibold">${m.cidade}</p>
+                        </div>
+                        <div class="border border-white/10 p-4">
+                            <p class="text-white/30 text-[10px] uppercase tracking-widest mb-1">Membra desde</p>
+                            <p class="text-sm font-semibold">${m.desde}</p>
+                        </div>
+                    </div>
+
+                    <!-- Moto atual -->
+                    <div>
+                        <p class="text-white/30 text-[10px] uppercase tracking-widest mb-3">Moto Atual</p>
+                        <div class="flex items-center gap-3 border border-white/10 p-4">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-white/50"><path d="M5.5 17a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"/><path d="M18.5 17a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"/><path d="M12 17h1.5l2-4.5h-5.5Z"/><path d="M7 12h10l-2-5H9l-2 5Z"/><path d="M10 7V4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3"/></svg>
+                            <span class="font-semibold">${m.motoAtual}</span>
+                        </div>
+                    </div>
+
+                    <!-- Histórico -->
+                    <div>
+                        <p class="text-white/30 text-[10px] uppercase tracking-widest mb-4">Histórico de Motos</p>
+                        <div class="relative">${historyHTML}</div>
+                    </div>
+
+                    <!-- Blockchain info -->
+                    <div class="border border-purple-500/30 p-4 bg-purple-950/10">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="chain-dot"></span>
+                            <p class="text-[10px] uppercase tracking-widest text-purple-400">Registro Blockchain · Polygon</p>
+                        </div>
+                        <div class="space-y-2">
+                            <div class="flex justify-between items-center">
+                                <span class="text-white/30 text-xs">Endereço do perfil</span>
+                                <span class="text-purple-300 text-xs font-mono">${m.blockchain}</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-white/30 text-xs">TX de registro</span>
+                                <span class="text-purple-300 text-xs font-mono">${m.txHash}</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-white/30 text-xs">Rede</span>
+                                <span class="text-white/60 text-xs">Polygon Mainnet</span>
+                            </div>
+                        </div>
+                        <a href="#" class="mt-3 block text-center text-[10px] uppercase tracking-widest text-purple-400/60 hover:text-purple-300 transition-colors border border-purple-500/20 py-2">
+                            Verificar no Polygonscan →
+                        </a>
+                    </div>
+
+                    <!-- Nota futura -->
+                    <p class="text-white/15 text-[10px] text-center">
+                        ⚠ Dados de exemplo. Após integração com o contrato, as informações serão lidas diretamente da blockchain.
+                    </p>
+                </div>
+            `;
+
+            document.getElementById('modalOverlay').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(e) {
+            if (!e || e.target === document.getElementById('modalOverlay')) {
+                document.getElementById('modalOverlay').classList.remove('open');
+                document.body.style.overflow = '';
+            }
+        }
+
+        // Inicializar
+        renderGrid(members);
+
+        // Reveal on scroll
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('active'); });
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+</body>
+
+</html>

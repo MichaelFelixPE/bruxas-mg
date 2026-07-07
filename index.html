@@ -1,0 +1,1294 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="theme-color" content="#000000">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>BRUXAS - Moto Grupo Feminino</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Inter:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #ffffff;
+            --bg: #000000;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--primary);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .font-cinzel {
+            font-family: 'Cinzel', serif;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.5s ease;
+        }
+
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-5px);
+        }
+
+        .chrome-text {
+            background: linear-gradient(135deg, #ffffff 0%, #a1a1a1 50%, #ffffff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #000;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0.1;
+            }
+
+            50% {
+                transform: translateY(-40px) rotate(10deg);
+                opacity: 0.2;
+            }
+        }
+
+        @keyframes float-alt {
+
+            0%,
+            100% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0.08;
+            }
+
+            50% {
+                transform: translateY(50px) rotate(-15deg);
+                opacity: 0.15;
+            }
+        }
+
+        @keyframes pulse-glow {
+
+            0%,
+            100% {
+                opacity: 0.3;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.6;
+                transform: scale(1.2);
+            }
+        }
+
+        .floating-skull {
+            position: fixed;
+            pointer-events: none;
+            z-index: 1;
+            filter: blur(1px);
+        }
+
+        .skull-1 {
+            top: 10%;
+            left: 5%;
+            animation: float 15s infinite ease-in-out;
+        }
+
+        .skull-2 {
+            bottom: 20%;
+            right: 10%;
+            animation: float-alt 20s infinite ease-in-out;
+        }
+
+        .glint {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 0 10px 2px white;
+            animation: pulse-glow 4s infinite ease-in-out;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .hero-overlay {
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.4) 50%, rgba(0, 0, 0, 1) 100%);
+        }
+
+        .patch-logo {
+            width: 80px;
+            height: 80px;
+            background: #fff;
+            padding: 2px;
+            border-radius: 50%;
+            border: 4px solid #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+        }
+
+        .patch-logo-inner {
+            background: #000;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-family: 'Cinzel', serif;
+            font-weight: 900;
+            font-size: 10px;
+            line-height: 1.1;
+            text-align: center;
+        }
+
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 280px;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.98);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            transition: right 0.3s ease-in-out;
+            padding: 2rem;
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .mobile-menu.active {
+            right: 0;
+        }
+
+        .mobile-menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .mobile-menu-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        * {
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+        }
+
+        img {
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        @media (max-width: 768px) {
+            .floating-skull {
+                display: none;
+            }
+
+            .glint {
+                display: none;
+            }
+
+            a,
+            button {
+                min-height: 44px;
+                min-width: 44px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .patch-logo {
+                width: 60px;
+                height: 60px;
+                border-width: 3px;
+            }
+
+            .glass-card {
+                padding: 1.5rem !important;
+            }
+
+            .glass-card:hover {
+                transform: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay" onclick="toggleMenu()"></div>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="flex justify-end mb-8">
+            <button onclick="toggleMenu()" class="text-white p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        <nav class="flex flex-col space-y-6">
+            <a href="#inicio" onclick="toggleMenu()"
+                class="text-lg font-semibold uppercase tracking-widest text-white/70 hover:text-white transition-colors py-3 border-b border-white/10">Início</a>
+            <a href="#sobre" onclick="toggleMenu()"
+                class="text-lg font-semibold uppercase tracking-widest text-white/70 hover:text-white transition-colors py-3 border-b border-white/10">Sobre
+                Nós</a>
+            <a href="#perfis" onclick="toggleMenu()"
+                class="text-lg font-semibold uppercase tracking-widest text-white/70 hover:text-white transition-colors py-3 border-b border-white/10">Nossas
+                Bruxas</a>
+            <a href="#recrutamento" onclick="toggleMenu()"
+                class="text-lg font-semibold uppercase tracking-widest text-white/70 hover:text-white transition-colors py-3 border-b border-white/10">Recrutamento</a>
+            <a href="#contato" onclick="toggleMenu()"
+                class="text-lg font-semibold uppercase tracking-widest text-white/70 hover:text-white transition-colors py-3 border-b border-white/10">Contato</a>
+        </nav>
+    </div>
+
+    <!-- Elementos Flutuantes -->
+    <div class="floating-skull skull-1">
+        <svg width="180" height="180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 10L9.01 10" />
+            <path d="M15 10L15.01 10" />
+            <path
+                d="M12 2a8 8 0 0 0-8 8v1a2 2 0 0 0 2 2 2 2 0 0 1 2 2v3a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-3a2 2 0 0 1 2-2 2 2 0 0 0 2-2v-1a8 8 0 0 0-8-8z" />
+            <path d="M10 17L10 21" />
+            <path d="M14 17L14 21" />
+        </svg>
+    </div>
+    <div class="floating-skull skull-2">
+        <svg width="240" height="240" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.3"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 10L9.01 10" />
+            <path d="M15 10L15.01 10" />
+            <path
+                d="M12 2a8 8 0 0 0-8 8v1a2 2 0 0 0 2 2 2 2 0 0 1 2 2v3a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-3a2 2 0 0 1 2-2 2 2 0 0 0 2-2v-1a8 8 0 0 0-8-8z" />
+            <path d="M10 17L10 21" />
+            <path d="M14 17L14 21" />
+        </svg>
+    </div>
+
+    <!-- Header -->
+    <header id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-500 py-8 bg-transparent">
+        <div class="container mx-auto px-6 flex items-center justify-between">
+            <div class="hidden md:flex space-x-8">
+                <a href="#inicio"
+                    class="text-sm font-semibold uppercase tracking-widest text-white/70 hover:text-white transition-colors">Início</a>
+                <a href="#sobre"
+                    class="text-sm font-semibold uppercase tracking-widest text-white/70 hover:text-white transition-colors">Sobre
+                    Nós</a>
+            </div>
+
+            <div class="flex flex-col items-center">
+                <div class="patch-logo">
+                    <img src="logo.png" alt="BRUXAS Moto Grupo" class="w-full h-full object-cover rounded-full">
+                </div>
+            </div>
+
+            <div class="hidden md:flex space-x-8">
+                <a href="#perfis"
+                    class="text-sm font-semibold uppercase tracking-widest text-white/70 hover:text-white transition-colors">Nossas
+                    Bruxas</a>
+                <a href="#recrutamento"
+                    class="text-sm font-semibold uppercase tracking-widest text-white/70 hover:text-white transition-colors">Recrutamento</a>
+                <a href="#contato"
+                    class="text-sm font-semibold uppercase tracking-widest text-white/70 hover:text-white transition-colors">Contato</a>
+            </div>
+
+            <button class="md:hidden text-white p-2 -mr-2" onclick="toggleMenu()" aria-label="Menu">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="inicio" class="relative h-screen w-full flex items-center justify-center overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1558981403-c5f91cbba527?auto=format&fit=crop&q=80&w=2000" alt=""
+                class="w-full h-full object-cover grayscale opacity-60">
+            <div class="absolute inset-0 hero-overlay"></div>
+        </div>
+
+        <div class="container mx-auto px-6 relative z-10 text-center">
+            <div class="reveal active">
+                <h2
+                    class="text-sm md:text-xl font-semibold tracking-[0.2em] md:tracking-[0.3em] uppercase mb-4 text-white/60">
+                    Estrada • Irmandade • Coragem</h2>
+                <h1
+                    class="text-4xl sm:text-5xl md:text-8xl font-cinzel font-black mb-6 md:mb-8 leading-tight tracking-tighter">
+                    BRUXAS<br>
+                    <span class="text-white/90 text-3xl sm:text-4xl md:text-7xl">Liberdade sobre duas rodas</span>
+                </h1>
+                <p class="text-base md:text-2xl text-white/70 max-w-2xl mx-auto mb-8 md:mb-12 font-light italic px-4">
+                    "Um moto grupo feito por mulheres, para mulheres. Onde o asfalto é o nosso templo e a sororidade o
+                    nosso código."
+                </p>
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4 md:gap-6 px-4">
+                    <a href="#recrutamento"
+                        class="w-full sm:w-auto px-8 md:px-10 py-4 md:py-5 bg-white text-black font-bold uppercase tracking-widest text-xs md:text-sm hover:bg-black hover:text-white border-2 border-white transition-all duration-300 text-center">
+                        Quero Fazer Parte
+                    </a>
+                    <a href="#sobre"
+                        class="w-full sm:w-auto px-8 md:px-10 py-4 md:py-5 border-2 border-white/30 text-white font-bold uppercase tracking-widest text-xs md:text-sm hover:bg-white/10 transition-all duration-300 backdrop-blur-sm text-center">
+                        Conheça Nossa História
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div
+            class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 animate-bounce opacity-40">
+            <span class="text-[10px] uppercase tracking-widest text-white">Rolar</span>
+            <div class="w-[1px] h-12 bg-white"></div>
+        </div>
+    </section>
+
+    <!-- Sobre Section -->
+    <section id="sobre" class="py-16 md:py-24 bg-black relative overflow-hidden">
+        <div class="container mx-auto px-6 grid md:grid-cols-2 gap-12 md:gap-16 items-center">
+            <div class="reveal">
+                <span
+                    class="text-white/40 font-semibold tracking-widest uppercase text-xs md:text-sm block mb-3 md:mb-4">Desde
+                    2018</span>
+                <h2 class="text-3xl md:text-6xl font-cinzel font-bold mb-6 md:mb-8 chrome-text">Nossa Essência</h2>
+                <div class="space-y-4 md:space-y-6 text-white/70 text-base md:text-lg leading-relaxed">
+                    <p>O Moto Grupo <strong class="text-white">BRUXAS</strong> nasceu de um desejo latente por liberdade
+                        absoluta. Não somos apenas mulheres em motos; somos uma força da natureza que reivindica seu
+                        espaço no asfalto.</p>
+                    <p>Nossa irmandade é baseada na <strong class="text-white">sororidade real</strong>. Aqui, cada
+                        quilômetro rodado é um pacto de respeito mútuo e união. Protegemos umas às outras, celebramos
+                        conquistas e enfrentamos os desafios da estrada com a cabeça erguida.</p>
+                    <p class="border-l-4 border-white pl-4 md:pl-6 italic font-light text-sm md:text-base">"Nenhuma
+                        tolerância a preconceito ou machismo. Somos donas dos nossos destinos e dos nossos motores."</p>
+                </div>
+            </div>
+
+            <div class="reveal">
+                <div class="relative">
+                    <div
+                        class="aspect-[4/5] overflow-hidden rounded-sm grayscale border-2 border-white/10 hover:grayscale-0 transition-all duration-700">
+                        <img src="https://i.imgur.com/wPyYlTk.jpg" alt="Bruxas na estrada"
+                            class="w-full h-full object-cover">
+                    </div>
+                    <div
+                        class="absolute -bottom-10 -right-10 w-48 h-48 bg-white/5 backdrop-blur-3xl rounded-full z-[-1] hidden md:block">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pilares -->
+    <section id="missao" class="py-16 md:py-24 bg-[#0a0a0a]">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12 md:mb-16 reveal">
+                <h2 class="text-2xl md:text-3xl lg:text-5xl font-cinzel font-bold mb-4">Nossos Pilares</h2>
+                <div class="w-16 md:w-20 h-1 bg-white mx-auto"></div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6 md:gap-8">
+                <div class="reveal glass-card p-6 md:p-10 group">
+                    <div class="mb-4 md:mb-6 group-hover:scale-110 transition-transform duration-500">
+                        <svg width="40" height="40" class="md:w-12 md:h-12" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 10L9.01 10" />
+                            <path d="M15 10L15.01 10" />
+                            <path
+                                d="M12 2a8 8 0 0 0-8 8v1a2 2 0 0 0 2 2 2 2 0 0 1 2 2v3a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-3a2 2 0 0 1 2-2 2 2 0 0 0 2-2v-1a8 8 0 0 0-8-8z" />
+                            <path d="M10 17L10 21" />
+                            <path d="M14 17L14 21" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl md:text-2xl font-cinzel font-bold mb-3 md:mb-4">Irmandade Real</h3>
+                    <p class="text-white/60 leading-relaxed text-sm md:text-base">Mais que um grupo, somos uma família.
+                        O apoio mútuo dentro e fora da estrada é o que nos mantém unidas.</p>
+                </div>
+                <div class="reveal glass-card p-6 md:p-10 group" style="transition-delay: 0.1s;">
+                    <div class="mb-4 md:mb-6 group-hover:scale-110 transition-transform duration-500">
+                        <svg width="40" height="40" class="md:w-12 md:h-12" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M5.5 17a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" />
+                            <path d="M18.5 17a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" />
+                            <path d="M12 17h1.5l2-4.5h-5.5Z" />
+                            <path d="M7 12h10l-2-5H9l-2 5Z" />
+                            <path d="M10 7V4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl md:text-2xl font-cinzel font-bold mb-3 md:mb-4">Estrada e Liberdade</h3>
+                    <p class="text-white/60 leading-relaxed text-sm md:text-base">Acreditamos que a felicidade está no
+                        caminho. Viagens épicas, vento no rosto e o ronco dos motores.</p>
+                </div>
+                <div class="reveal glass-card p-6 md:p-10 group" style="transition-delay: 0.2s;">
+                    <div class="mb-4 md:mb-6 group-hover:scale-110 transition-transform duration-500">
+                        <svg width="40" height="40" class="md:w-12 md:h-12" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                            <path d="m9 12 2 2 4-4" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl md:text-2xl font-cinzel font-bold mb-3 md:mb-4">Respeito e Força</h3>
+                    <p class="text-white/60 leading-relaxed text-sm md:text-base">Pelo empoderamento feminino no
+                        motociclismo. Lutamos contra estereótipos com força e elegância.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Galeria -->
+    <section class="py-24 bg-black overflow-hidden">
+        <div class="container mx-auto px-6">
+            <!-- Cabeçalho (Mantido igual) -->
+            <div class="flex flex-col md:flex-row items-end justify-between mb-16 gap-4 reveal">
+                <div>
+                    <span class="text-white/40 tracking-widest uppercase text-xs">A Vida no Asfalto</span>
+                    <h2 class="text-4xl md:text-5xl font-cinzel font-bold text-white">Galeria das Bruxas</h2>
+                </div>
+                <div class="text-white/40 max-w-sm text-sm text-right">
+                    Instantâneos de liberdade e união capturados em nossas rodagens.
+                </div>
+            </div>
+
+            <!-- Container do Carrossel -->
+            <div class="relative w-full">
+                <!-- Pista do Carrossel -->
+                <div id="carousel-track" class="flex transition-transform duration-700 ease-in-out"
+                    style="transform: translateX(0%);">
+
+                    <!-- Item 1 -->
+                    <div class="w-full sm:w-1/2 md:w-1/3 flex-shrink-0 px-2 md:px-4">
+                        <div
+                            class="reveal relative aspect-square overflow-hidden group cursor-pointer border border-white/5">
+                            <img src="https://i.imgur.com/meBUkAl.jpeg" alt="Bruxas 1"
+                                class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700">
+                            <div
+                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
+                                <span
+                                    class="text-white text-xs tracking-widest uppercase font-bold border-b border-white pb-1">Ver
+                                    Detalhes</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Item 2 -->
+                    <div class="w-full sm:w-1/2 md:w-1/3 flex-shrink-0 px-2 md:px-4">
+                        <div
+                            class="reveal relative aspect-square overflow-hidden group cursor-pointer border border-white/5">
+                            <img src="https://i.imgur.com/vhfwN1q.jpeg" alt="Bruxas 2"
+                                class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700">
+                            <div
+                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
+                                <span
+                                    class="text-white text-xs tracking-widest uppercase font-bold border-b border-white pb-1">Ver
+                                    Detalhes</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Item 3 -->
+                    <div class="w-full sm:w-1/2 md:w-1/3 flex-shrink-0 px-2 md:px-4">
+                        <div
+                            class="reveal relative aspect-square overflow-hidden group cursor-pointer border border-white/5">
+                            <img src="https://i.imgur.com/0H2Io1i.jpeg" alt="Bruxas 3"
+                                class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700">
+                            <div
+                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
+                                <span
+                                    class="text-white text-xs tracking-widest uppercase font-bold border-b border-white pb-1">Ver
+                                    Detalhes</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Item 4 -->
+                    <div class="w-full sm:w-1/2 md:w-1/3 flex-shrink-0 px-2 md:px-4">
+                        <div
+                            class="reveal relative aspect-square overflow-hidden group cursor-pointer border border-white/5">
+                            <img src="https://i.imgur.com/Co6qiSH.jpeg" alt="Bruxas 4"
+                                class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700">
+                            <div
+                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
+                                <span
+                                    class="text-white text-xs tracking-widest uppercase font-bold border-b border-white pb-1">Ver
+                                    Detalhes</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Item 5 -->
+                    <div class="w-full sm:w-1/2 md:w-1/3 flex-shrink-0 px-2 md:px-4">
+                        <div
+                            class="reveal relative aspect-square overflow-hidden group cursor-pointer border border-white/5">
+                            <img src="https://i.imgur.com/XqcbooT.jpeg" alt="Bruxas 5"
+                                class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700">
+                            <div
+                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
+                                <span
+                                    class="text-white text-xs tracking-widest uppercase font-bold border-b border-white pb-1">Ver
+                                    Detalhes</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Item 6 -->
+                    <div class="w-full sm:w-1/2 md:w-1/3 flex-shrink-0 px-2 md:px-4">
+                        <div
+                            class="reveal relative aspect-square overflow-hidden group cursor-pointer border border-white/5">
+                            <img src="https://i.imgur.com/8fZjsP1.jpeg" alt="Bruxas 6"
+                                class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700">
+                            <div
+                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
+                                <span
+                                    class="text-white text-xs tracking-widest uppercase font-bold border-b border-white pb-1">Ver
+                                    Detalhes</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Item 7 -->
+                    <div class="w-full sm:w-1/2 md:w-1/3 flex-shrink-0 px-2 md:px-4">
+                        <div
+                            class="reveal relative aspect-square overflow-hidden group cursor-pointer border border-white/5">
+                            <img src="https://i.imgur.com/EbfHqeR.jpeg" alt="Bruxas 7"
+                                class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700">
+                            <div
+                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
+                                <span
+                                    class="text-white text-xs tracking-widest uppercase font-bold border-b border-white pb-1">Ver
+                                    Detalhes</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Item 8 -->
+                    <div class="w-full sm:w-1/2 md:w-1/3 flex-shrink-0 px-2 md:px-4">
+                        <div
+                            class="reveal relative aspect-square overflow-hidden group cursor-pointer border border-white/5">
+                            <img src="https://i.imgur.com/7GX0CAh.jpeg" alt="Bruxas 8"
+                                class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700">
+                            <div
+                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
+                                <span
+                                    class="text-white text-xs tracking-widest uppercase font-bold border-b border-white pb-1">Ver
+                                    Detalhes</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Item 9 -->
+                    <div class="w-full sm:w-1/2 md:w-1/3 flex-shrink-0 px-2 md:px-4">
+                        <div
+                            class="reveal relative aspect-square overflow-hidden group cursor-pointer border border-white/5">
+                            <img src="https://i.imgur.com/cPCIIoA.jpeg" alt="Bruxas 9"
+                                class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700">
+                            <div
+                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
+                                <span
+                                    class="text-white text-xs tracking-widest uppercase font-bold border-b border-white pb-1">Ver
+                                    Detalhes</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Item 10 -->
+                    <div class="w-full sm:w-1/2 md:w-1/3 flex-shrink-0 px-2 md:px-4">
+                        <div
+                            class="reveal relative aspect-square overflow-hidden group cursor-pointer border border-white/5">
+                            <img src="https://i.imgur.com/JFScEHc.jpeg" alt="Bruxas 10"
+                                class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700">
+                            <div
+                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
+                                <span
+                                    class="text-white text-xs tracking-widest uppercase font-bold border-b border-white pb-1">Ver
+                                    Detalhes</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Item 11 -->
+                    <div class="w-full sm:w-1/2 md:w-1/3 flex-shrink-0 px-2 md:px-4">
+                        <div
+                            class="reveal relative aspect-square overflow-hidden group cursor-pointer border border-white/5">
+                            <img src="https://i.imgur.com/QJa2Hng.jpeg" alt="Bruxas 11"
+                                class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700">
+                            <div
+                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
+                                <span
+                                    class="text-white text-xs tracking-widest uppercase font-bold border-b border-white pb-1">Ver
+                                    Detalhes</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Item 12 -->
+                    <div class="w-full sm:w-1/2 md:w-1/3 flex-shrink-0 px-2 md:px-4">
+                        <div
+                            class="reveal relative aspect-square overflow-hidden group cursor-pointer border border-white/5">
+                            <img src="https://i.imgur.com/A2BWPkL.jpeg" alt="Bruxas 12"
+                                class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700">
+                            <div
+                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
+                                <span
+                                    class="text-white text-xs tracking-widest uppercase font-bold border-b border-white pb-1">Ver
+                                    Detalhes</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Item 13 -->
+                    <div class="w-full sm:w-1/2 md:w-1/3 flex-shrink-0 px-2 md:px-4">
+                        <div
+                            class="reveal relative aspect-square overflow-hidden group cursor-pointer border border-white/5">
+                            <img src="https://i.imgur.com/ftuNCJm.jpeg" alt="Bruxas 13"
+                                class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700">
+                            <div
+                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
+                                <span
+                                    class="text-white text-xs tracking-widest uppercase font-bold border-b border-white pb-1">Ver
+                                    Detalhes</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Item 14 -->
+                    <div class="w-full sm:w-1/2 md:w-1/3 flex-shrink-0 px-2 md:px-4">
+                        <div
+                            class="reveal relative aspect-square overflow-hidden group cursor-pointer border border-white/5">
+                            <img src="https://i.imgur.com/psMZnEm.jpeg" alt="Bruxas 14"
+                                class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700">
+                            <div
+                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
+                                <span
+                                    class="text-white text-xs tracking-widest uppercase font-bold border-b border-white pb-1">Ver
+                                    Detalhes</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Item 15 -->
+                    <div class="w-full sm:w-1/2 md:w-1/3 flex-shrink-0 px-2 md:px-4">
+                        <div
+                            class="reveal relative aspect-square overflow-hidden group cursor-pointer border border-white/5">
+                            <img src="https://i.imgur.com/Leqc97E.jpeg" alt="Bruxas 15"
+                                class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700">
+                            <div
+                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
+                                <span
+                                    class="text-white text-xs tracking-widest uppercase font-bold border-b border-white pb-1">Ver
+                                    Detalhes</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Item 16 -->
+                    <div class="w-full sm:w-1/2 md:w-1/3 flex-shrink-0 px-2 md:px-4">
+                        <div
+                            class="reveal relative aspect-square overflow-hidden group cursor-pointer border border-white/5">
+                            <img src="https://i.imgur.com/GUOROiB.jpeg" alt="Bruxas 16"
+                                class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700">
+                            <div
+                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
+                                <span
+                                    class="text-white text-xs tracking-widest uppercase font-bold border-b border-white pb-1">Ver
+                                    Detalhes</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Item 17 -->
+                    <div class="w-full sm:w-1/2 md:w-1/3 flex-shrink-0 px-2 md:px-4">
+                        <div
+                            class="reveal relative aspect-square overflow-hidden group cursor-pointer border border-white/5">
+                            <img src="https://i.imgur.com/koLPT9L.jpeg" alt="Bruxas 17"
+                                class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700">
+                            <div
+                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
+                                <span
+                                    class="text-white text-xs tracking-widest uppercase font-bold border-b border-white pb-1">Ver
+                                    Detalhes</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Item 18 -->
+                    <div class="w-full sm:w-1/2 md:w-1/3 flex-shrink-0 px-2 md:px-4">
+                        <div
+                            class="reveal relative aspect-square overflow-hidden group cursor-pointer border border-white/5">
+                            <img src="https://i.imgur.com/CjT35lR.jpeg" alt="Bruxas 18"
+                                class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700">
+                            <div
+                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
+                                <span
+                                    class="text-white text-xs tracking-widest uppercase font-bold border-b border-white pb-1">Ver
+                                    Detalhes</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Item 19 -->
+                    <div class="w-full sm:w-1/2 md:w-1/3 flex-shrink-0 px-2 md:px-4">
+                        <div
+                            class="reveal relative aspect-square overflow-hidden group cursor-pointer border border-white/5">
+                            <img src="https://i.imgur.com/znRWzKe.jpeg" alt="Bruxas 19"
+                                class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700">
+                            <div
+                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
+                                <span
+                                    class="text-white text-xs tracking-widest uppercase font-bold border-b border-white pb-1">Ver
+                                    Detalhes</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Item 20 -->
+                    <div class="w-full sm:w-1/2 md:w-1/3 flex-shrink-0 px-2 md:px-4">
+                        <div
+                            class="reveal relative aspect-square overflow-hidden group cursor-pointer border border-white/5">
+                            <img src="https://i.imgur.com/R2cZT6j.jpeg" alt="Bruxas 20"
+                                class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700">
+                            <div
+                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
+                                <span
+                                    class="text-white text-xs tracking-widest uppercase font-bold border-b border-white pb-1">Ver
+                                    Detalhes</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Item 21 -->
+                    <div class="w-full sm:w-1/2 md:w-1/3 flex-shrink-0 px-2 md:px-4">
+                        <div
+                            class="reveal relative aspect-square overflow-hidden group cursor-pointer border border-white/5">
+                            <img src="https://i.imgur.com/VyM5cj9.jpeg" alt="Bruxas 21"
+                                class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700">
+                            <div
+                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
+                                <span
+                                    class="text-white text-xs tracking-widest uppercase font-bold border-b border-white pb-1">Ver
+                                    Detalhes</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Item 22 -->
+                    <div class="w-full sm:w-1/2 md:w-1/3 flex-shrink-0 px-2 md:px-4">
+                        <div
+                            class="reveal relative aspect-square overflow-hidden group cursor-pointer border border-white/5">
+                            <img src="https://i.imgur.com/SgTL7On.jpeg" alt="Bruxas 22"
+                                class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700">
+                            <div
+                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
+                                <span
+                                    class="text-white text-xs tracking-widest uppercase font-bold border-b border-white pb-1">Ver
+                                    Detalhes</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Item 23 -->
+                    <div class="w-full sm:w-1/2 md:w-1/3 flex-shrink-0 px-2 md:px-4">
+                        <div
+                            class="reveal relative aspect-square overflow-hidden group cursor-pointer border border-white/5">
+                            <img src="https://i.imgur.com/alxA2yH.jpeg" alt="Bruxas 23"
+                                class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700">
+                            <div
+                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
+                                <span
+                                    class="text-white text-xs tracking-widest uppercase font-bold border-b border-white pb-1">Ver
+                                    Detalhes</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Item 24 -->
+                    <div class="w-full sm:w-1/2 md:w-1/3 flex-shrink-0 px-2 md:px-4">
+                        <div
+                            class="reveal relative aspect-square overflow-hidden group cursor-pointer border border-white/5">
+                            <img src="https://i.imgur.com/VoLlDtZ.jpeg" alt="Bruxas 24"
+                                class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700">
+                            <div
+                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
+                                <span
+                                    class="text-white text-xs tracking-widest uppercase font-bold border-b border-white pb-1">Ver
+                                    Detalhes</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Item 25 -->
+                    <div class="w-full sm:w-1/2 md:w-1/3 flex-shrink-0 px-2 md:px-4">
+                        <div
+                            class="reveal relative aspect-square overflow-hidden group cursor-pointer border border-white/5">
+                            <img src="https://i.imgur.com/zbMMP7P.jpeg" alt="Bruxas 25"
+                                class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700">
+                            <div
+                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
+                                <span
+                                    class="text-white text-xs tracking-widest uppercase font-bold border-b border-white pb-1">Ver
+                                    Detalhes</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Item 26 -->
+                    <div class="w-full sm:w-1/2 md:w-1/3 flex-shrink-0 px-2 md:px-4">
+                        <div
+                            class="reveal relative aspect-square overflow-hidden group cursor-pointer border border-white/5">
+                            <img src="https://i.imgur.com/LmwBScL.jpeg" alt="Bruxas 26"
+                                class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700">
+                            <div
+                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
+                                <span
+                                    class="text-white text-xs tracking-widest uppercase font-bold border-b border-white pb-1">Ver
+                                    Detalhes</span>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- Item 27 -->
+                    <div class="w-full sm:w-1/2 md:w-1/3 flex-shrink-0 px-2 md:px-4">
+                        <div
+                            class="reveal relative aspect-square overflow-hidden group cursor-pointer border border-white/5">
+                            <img src="https://i.imgur.com/IGSbm3d.jpeg" alt="Bruxas 27"
+                                class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700">
+                            <div
+                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
+                                <span
+                                    class="text-white text-xs tracking-widest uppercase font-bold border-b border-white pb-1">Ver
+                                    Detalhes</span>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- Item 28 -->
+                    <div class="w-full sm:w-1/2 md:w-1/3 flex-shrink-0 px-2 md:px-4">
+                        <div
+                            class="reveal relative aspect-square overflow-hidden group cursor-pointer border border-white/5">
+                            <img src="https://i.imgur.com/m7iEhu1.jpeg" alt="Bruxas 28"
+                                class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700">
+                            <div
+                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
+                                <span
+                                    class="text-white text-xs tracking-widest uppercase font-bold border-b border-white pb-1">Ver
+                                    Detalhes</span>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- Item 29 -->
+                    <div class="w-full sm:w-1/2 md:w-1/3 flex-shrink-0 px-2 md:px-4">
+                        <div
+                            class="reveal relative aspect-square overflow-hidden group cursor-pointer border border-white/5">
+                            <img src="https://i.imgur.com/2YfCxW4.jpeg" alt="Bruxas 29"
+                                class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700">
+                            <div
+                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
+                                <span
+                                    class="text-white text-xs tracking-widest uppercase font-bold border-b border-white pb-1">Ver
+                                    Detalhes</span>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- Item 30 -->
+                    <div class="w-full sm:w-1/2 md:w-1/3 flex-shrink-0 px-2 md:px-4">
+                        <div
+                            class="reveal relative aspect-square overflow-hidden group cursor-pointer border border-white/5">
+                            <img src="https://i.imgur.com/awBFodU.jpeg" alt="Bruxas 30"
+                                class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700">
+                            <div
+                                class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
+                                <span
+                                    class="text-white text-xs tracking-widest uppercase font-bold border-b border-white pb-1">Ver
+                                    Detalhes</span>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Script do Carrossel Automático -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const track = document.getElementById('carousel-track');
+            const items = track.children;
+            let currentIndex = 0;
+            let autoPlayInterval;
+
+            // Função para calcular quantos itens aparecem na tela (Responsivo)
+            const getItemsPerView = () => {
+                if (window.innerWidth >= 768) return 3; // md: 3 fotos
+                if (window.innerWidth >= 640) return 2; // sm: 2 fotos
+                return 1; // mobile: 1 foto
+            };
+
+            const moveCarousel = () => {
+                const itemsPerView = getItemsPerView();
+                const maxIndex = items.length - itemsPerView;
+
+                currentIndex++;
+
+                // Se chegou no final, volta pro começo suavemente
+                if (currentIndex > maxIndex) {
+                    currentIndex = 0;
+                }
+
+                // Move a trilha calculando a porcentagem (100% / itens por tela)
+                const percentage = -(currentIndex * (100 / itemsPerView));
+                track.style.transform = `translateX(${percentage}%)`;
+            };
+
+            // Inicia o autoplay a cada 3 segundos (3000ms)
+            const startAutoPlay = () => {
+                autoPlayInterval = setInterval(moveCarousel, 3000);
+            };
+
+            // Pausa quando o usuário passa o mouse por cima
+            track.addEventListener('mouseenter', () => clearInterval(autoPlayInterval));
+            track.addEventListener('mouseleave', startAutoPlay);
+
+            // Recalcula caso a tela seja redimensionada
+            window.addEventListener('resize', () => {
+                currentIndex = 0;
+                track.style.transform = `translateX(0%)`;
+            });
+
+            startAutoPlay();
+        });
+    </script>
+
+    <!-- Nossas Bruxas (perfis resumidos) -->
+    <section id="perfis" class="py-16 md:py-24 bg-[#0a0a0a]">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12 md:mb-16 reveal">
+                <span class="text-white/30 text-xs uppercase tracking-[0.3em] block mb-3">Irmandade Verificada na
+                    Blockchain</span>
+                <h2 class="text-3xl md:text-5xl font-cinzel font-bold mb-4">Nossas Bruxas</h2>
+                <div class="w-16 md:w-20 h-1 bg-white mx-auto mb-6"></div>
+                <a href="perfil-bruxas.html"
+                    class="inline-block px-8 py-3 border border-white/30 text-white text-xs uppercase tracking-widest hover:bg-white hover:text-black transition-all duration-300">
+                    Ver Todos os Perfis →
+                </a>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6" id="perfisResumo">
+                <!-- Cards gerados via JS a partir dos mesmos dados de perfil-bruxas.html -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Recrutamento -->
+    <section id="recrutamento" class="py-16 md:py-24 bg-white text-black">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-2 gap-12 md:gap-16 items-center">
+                <div class="reveal">
+                    <h2 class="text-3xl md:text-5xl lg:text-7xl font-cinzel font-black mb-6 md:mb-8 leading-tight">Quer
+                        rodar com as BRUXAS?</h2>
+                    <p class="text-base md:text-xl mb-8 md:mb-12 text-black/70">Estamos sempre em busca de novas irmãs
+                        que compartilhem nossa paixão. O processo é criterioso, mas a recompensa é uma vida de
+                        aventuras.</p>
+
+                    <div class="space-y-3 md:space-y-4">
+                        <h3
+                            class="text-xs md:text-sm font-bold uppercase tracking-widest mb-4 md:mb-6 border-b border-black pb-2 inline-block">
+                            Critérios de Admissão</h3>
+                        <div class="flex items-center gap-3 md:gap-4 group">
+                            <div
+                                class="w-6 h-6 min-w-[24px] rounded-full border border-black flex items-center justify-center group-hover:bg-black group-hover:text-white transition-colors">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M20 6L9 17l-5-5" />
+                                </svg>
+                            </div>
+                            <span class="font-semibold text-sm md:text-base">Ser mulher (cis ou trans)</span>
+                        </div>
+                        <div class="flex items-center gap-3 md:gap-4 group">
+                            <div
+                                class="w-6 h-6 min-w-[24px] rounded-full border border-black flex items-center justify-center group-hover:bg-black group-hover:text-white transition-colors">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M20 6L9 17l-5-5" />
+                                </svg>
+                            </div>
+                            <span class="font-semibold text-sm md:text-base">Possuir moto própria</span>
+                        </div>
+                        <div class="flex items-center gap-3 md:gap-4 group">
+                            <div
+                                class="w-6 h-6 min-w-[24px] rounded-full border border-black flex items-center justify-center group-hover:bg-black group-hover:text-white transition-colors">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M20 6L9 17l-5-5" />
+                                </svg>
+                            </div>
+                            <span class="font-semibold text-sm md:text-base">Respeitar a hierarquia e irmandade</span>
+                        </div>
+                        <div class="flex items-center gap-3 md:gap-4 group">
+                            <div
+                                class="w-6 h-6 min-w-[24px] rounded-full border border-black flex items-center justify-center group-hover:bg-black group-hover:text-white transition-colors">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M20 6L9 17l-5-5" />
+                                </svg>
+                            </div>
+                            <span class="font-semibold text-sm md:text-base">Ter espírito livre e zero
+                                preconceitos</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reveal bg-black text-white p-6 md:p-8 lg:p-12 shadow-2xl">
+                    <h3 class="text-xl md:text-2xl font-cinzel font-bold mb-6 md:mb-8">Solicitação de Recrutamento</h3>
+                    <form id="recruitmentForm" onsubmit="sendToWhatsApp(event)" class="space-y-5 md:space-y-6">
+                        <div>
+                            <label class="block text-xs uppercase tracking-widest text-white/50 mb-2">Nome
+                                Completo</label>
+                            <input type="text" id="nome" required
+                                class="w-full bg-white/5 border-b border-white/20 px-4 py-3 focus:outline-none focus:border-white transition-colors text-base"
+                                placeholder="Seu nome aqui">
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
+                            <div>
+                                <label
+                                    class="block text-xs uppercase tracking-widest text-white/50 mb-2">WhatsApp</label>
+                                <input type="tel" id="whatsapp" required
+                                    class="w-full bg-white/5 border-b border-white/20 px-4 py-3 focus:outline-none focus:border-white transition-colors text-base"
+                                    placeholder="(00) 00000-0000">
+                            </div>
+                            <div>
+                                <label class="block text-xs uppercase tracking-widest text-white/50 mb-2">Moto
+                                    Atual</label>
+                                <input type="text" id="moto" required
+                                    class="w-full bg-white/5 border-b border-white/20 px-4 py-3 focus:outline-none focus:border-white transition-colors text-base"
+                                    placeholder="Ex: Vulcan 650">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs uppercase tracking-widest text-white/50 mb-2">Por que quer ser
+                                uma Bruxa?</label>
+                            <textarea rows="4" id="mensagem" required
+                                class="w-full bg-white/5 border-b border-white/20 px-4 py-3 focus:outline-none focus:border-white transition-colors resize-none text-base"
+                                placeholder="Conte sua história"></textarea>
+                        </div>
+                        <button type="submit"
+                            class="w-full py-4 md:py-5 bg-white text-black font-black uppercase tracking-widest text-xs md:text-sm hover:bg-black hover:text-white border-2 border-white transition-all">
+                            Enviar Solicitação
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contato" class="bg-black py-20 border-t border-white/10">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col items-center">
+                <div class="patch-logo mb-8">
+                    <img src="logo.png" alt="BRUXAS Moto Grupo" class="w-full h-full object-cover rounded-full">
+                </div>
+
+                <div class="flex gap-10 mb-12">
+                    <a href="https://instagram.com/bruxasmotogrupo" target="_blank"
+                        class="text-white/50 hover:text-white transition-colors flex flex-col items-center gap-2">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                            <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+                        </svg>
+                        <span class="text-[10px] uppercase tracking-widest">Instagram</span>
+                    </a>
+                    <a href="https://wa.me/558992011263" target="_blank"
+                        class="text-white/50 hover:text-white transition-colors flex flex-col items-center gap-2">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path
+                                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                        </svg>
+                        <span class="text-[10px] uppercase tracking-widest">WhatsApp</span>
+                    </a>
+                </div>
+
+                <div class="w-full border-t border-white/5 pt-10 text-center">
+                    <p class="text-white/20 text-[10px] uppercase tracking-[0.4em]">
+                        © 2026 Moto Grupo BRUXAS – Todos os direitos reservados.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- WhatsApp Button -->
+    <a href="https://wa.me/558992011263" target="_blank" aria-label="WhatsApp"
+        class="fixed bottom-6 right-6 md:bottom-8 md:right-8 z-[100] bg-white text-black w-16 h-16 md:w-14 md:h-14 rounded-full flex items-center justify-center shadow-2xl hover:scale-110 transition-transform duration-300 active:scale-95">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" class="md:w-7 md:h-7" viewBox="0 0 24 24"
+            fill="currentColor">
+            <path
+                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+        </svg>
+    </a>
+
+    <script>
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('bg-black/90', 'backdrop-blur-md', 'py-4', 'border-b', 'border-white/10');
+                navbar.classList.remove('bg-transparent', 'py-8');
+            } else {
+                navbar.classList.remove('bg-black/90', 'backdrop-blur-md', 'py-4', 'border-b', 'border-white/10');
+                navbar.classList.add('bg-transparent', 'py-8');
+            }
+        });
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('active');
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        function toggleMenu() {
+            const menu = document.getElementById('mobileMenu');
+            const overlay = document.getElementById('mobileMenuOverlay');
+            menu.classList.toggle('active');
+            overlay.classList.toggle('active');
+            document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : '';
+        }
+
+        function createGlints() {
+            if (window.innerWidth < 768) return;
+            for (let i = 0; i < 15; i++) {
+                const glint = document.createElement('div');
+                glint.className = 'glint';
+                glint.style.top = Math.random() * 100 + '%';
+                glint.style.left = Math.random() * 100 + '%';
+                glint.style.animationDelay = Math.random() * 5 + 's';
+                document.body.appendChild(glint);
+            }
+        }
+        createGlints();
+
+        function sendToWhatsApp(event) {
+            event.preventDefault();
+            const nome = document.getElementById('nome').value;
+            const whatsapp = document.getElementById('whatsapp').value;
+            const moto = document.getElementById('moto').value;
+            const mensagem = document.getElementById('mensagem').value;
+            const texto = `🏍️ *SOLICITAÇÃO DE RECRUTAMENTO - BRUXAS*\n\n*Nome:* ${nome}\n*WhatsApp:* ${whatsapp}\n*Moto Atual:* ${moto}\n\n*Por que quer ser uma Bruxa:*\n${mensagem}`;
+            window.open(`https://wa.me/558992011263?text=${encodeURIComponent(texto)}`, '_blank');
+        }
+
+        // ================================================================
+        // MESMA FONTE DE DADOS do perfil-bruxas.html — mantenha sincronizado
+        // Ao adicionar/editar uma membra em perfil-bruxas.html, replique aqui.
+        // ================================================================
+        const membersResumo = [
+            { nome: "Minerva", patente: "Presidente", foto: "https://i.imgur.com/O2rdD36.jpg" },
+            { nome: "Corvina", patente: "Vice-Presidente", foto: "https://i.imgur.com/OMwKQbq.jpg" },
+            { nome: "Galena", patente: "Membro", foto: "https://i.imgur.com/hyprL1n.jpg" },
+            { nome: "Tai", patente: "Membro", foto: "https://i.imgur.com/LXwnCxo.jpg" },
+            { nome: "Vampira", patente: "Membro", foto: "https://i.imgur.com/VZe4Vp6.jpg" }
+        ];
+
+        function badgeClassResumo(patente) {
+            const map = {
+                "Presidente": "text-yellow-400/80 border-yellow-400/30",
+                "Vice-Presidente": "text-white/50 border-white/20",
+                "Secretária": "text-amber-600/80 border-amber-700/30",
+                "Tesoureira": "text-white/40 border-white/15",
+                "Membro": "text-white/40 border-white/15"
+            };
+            return map[patente] || "text-white/40 border-white/15";
+        }
+
+        function renderPerfisResumo() {
+            const container = document.getElementById('perfisResumo');
+            // Mostra até 4 na página principal (Presidente, Vice + 2 membras)
+            const destaque = membersResumo.slice(0, 4);
+            container.innerHTML = destaque.map((m, i) => `
+                <div class="reveal glass-card p-5 text-center group cursor-pointer"
+                    onclick="window.location.href='perfil-bruxas.html'" style="transition-delay:${i * 0.05}s">
+                    <div class="w-20 h-20 mx-auto mb-3 rounded-full overflow-hidden border border-white/20">
+                        <img src="${m.foto}" alt="${m.nome}"
+                            class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500">
+                    </div>
+                    <p class="font-cinzel font-bold text-sm">${m.nome}</p>
+                    <p class="text-[10px] uppercase tracking-widest border px-2 py-0.5 inline-block mt-1 ${badgeClassResumo(m.patente)}">${m.patente}</p>
+                </div>
+            `).join('');
+
+            container.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        }
+        renderPerfisResumo();
+    </script>
+</body>
+
+</html>
