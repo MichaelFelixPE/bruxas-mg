@@ -428,6 +428,15 @@
             return map[patente] || "badge-membro";
         }
 
+        // 👇 NOVO: gera um "slug" (endereço) único a partir do nome da membra
+        // Ex: "Minerva" -> "minerva" | "Vice Corvina" -> "vice-corvina"
+        function slugify(m) {
+            return m.nome.toLowerCase()
+                .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // remove acentos
+                .replace(/[^a-z0-9]+/g, '-')
+                .replace(/(^-|-$)/g, '');
+        }
+
         // Renderiza grade
         let activeFilter = 'todas';
 
@@ -514,7 +523,7 @@
         }
 
         // Modal
-        function openModal(m) {
+        function openModal(m, updateUrl = true) {
             const box = document.getElementById('modalBox');
 
             const historyHTML = m.historico.length
@@ -611,12 +620,24 @@
 
             document.getElementById('modalOverlay').classList.add('open');
             document.body.style.overflow = 'hidden';
+
+            // 👇 NOVO: atualiza a URL com o "endereço" do perfil (ex: #minerva)
+            // updateUrl = false é usado quando o modal é aberto a partir da própria URL
+            // (ao carregar a página ou usar o botão voltar), pra não empilhar histórico duplicado.
+            if (updateUrl) {
+                history.pushState({ perfil: m.id }, '', '#' + slugify(m));
+            }
         }
 
         function closeModal(e) {
             if (!e || e.target === document.getElementById('modalOverlay')) {
                 document.getElementById('modalOverlay').classList.remove('open');
                 document.body.style.overflow = '';
+
+                // 👇 NOVO: limpa o endereço da URL ao fechar o perfil
+                if (location.hash) {
+                    history.pushState(null, '', location.pathname + location.search);
+                }
             }
         }
 
@@ -628,6 +649,31 @@
             entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('active'); });
         }, { threshold: 0.1 });
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // ========================================================
+        // 👇 NOVO: Rotas por perfil (URL única para cada membra)
+        // ========================================================
+
+        // Abre o modal correspondente ao "endereço" (#slug) atual da URL, se houver.
+        function openFromHash() {
+            const slug = location.hash.replace('#', '');
+            if (!slug) return;
+            const membro = members.find(m => slugify(m) === slug);
+            if (membro) openModal(membro, false); // false = não empilha histórico de novo
+        }
+
+        // Roda ao carregar a página (ex: alguém abriu o link direto de um perfil)
+        openFromHash();
+
+        // Roda quando o usuário usa o botão "voltar"/"avançar" do navegador
+        window.addEventListener('popstate', () => {
+            if (location.hash) {
+                openFromHash();
+            } else {
+                document.getElementById('modalOverlay').classList.remove('open');
+                document.body.style.overflow = '';
+            }
+        });
     </script>
 </body>
 
